@@ -36,23 +36,24 @@ async def translate(interaction: discord.Interaction, message: str) -> None:
     """Ask chatbot to translate message to NLLB and google translate"""
     await interaction.response.defer()
 
-    tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-600M", use_auth_token=True, src_lang="eng_Latn")
-    model = AutoModelForSeq2SeqLM.from_pretrained("facebook/nllb-200-distilled-600M", use_auth_token=True)
-    inputs = tokenizer(message, return_tensors="pt")
+    try:
+        inputs = tokenizer(message, return_tensors="pt")
 
-    translated_tokens = model.generate(**inputs, forced_bos_token_id=tokenizer.lang_code_to_id["khm_Khmr"], max_length=100)
-    res_nllb = tokenizer.batch_decode(translated_tokens, skip_special_tokens=True)[0]
+        translated_tokens = model.generate(**inputs, forced_bos_token_id=tokenizer.lang_code_to_id["khm_Khmr"], max_length=100)
+        res_nllb = tokenizer.batch_decode(translated_tokens, skip_special_tokens=True)[0]
 
-    translator = Translator()
-    translation = translator.translate(message, dest='km')
-    res_gtrans = translation.text
+        translator = Translator()
+        translation = translator.translate(message, dest='km')
+        res_gtrans = translation.text
 
-    embedVar = discord.Embed(title="Result", color=0x00ff00)
-    embedVar.add_field(name="input", value=message, inline=False)
-    embedVar.add_field(name="nllb", value=res_nllb, inline=False)
-    embedVar.add_field(name="gtrans", value=res_gtrans, inline=False)
+        embedVar = discord.Embed(title="Result", color=0x00ff00)
+        embedVar.add_field(name="input", value=message, inline=False)
+        embedVar.add_field(name="nllb", value=res_nllb, inline=False)
+        embedVar.add_field(name="gtrans", value=res_gtrans, inline=False)
 
-    await interaction.followup.send(embed=embedVar)
+        await interaction.followup.send(embed=embedVar)
+    except e:
+        await interaction.followup.send("Failed to translate!")
 
 def login_hugging_face(token: str) -> None:
     """
@@ -69,5 +70,8 @@ def login_hugging_face(token: str) -> None:
 if ('hugging_face_token' in data and len(data['hugging_face_token']) > 0):
     login_hugging_face(data['hugging_face_token'])
 
+# Load tokenizer and model
+tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-600M", use_auth_token=True, src_lang="eng_Latn")
+model = AutoModelForSeq2SeqLM.from_pretrained("facebook/nllb-200-distilled-600M", use_auth_token=True)
 
 client.run(data['discord_bot_token'])
