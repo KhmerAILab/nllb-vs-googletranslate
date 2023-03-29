@@ -53,6 +53,7 @@ async def translate(interaction: discord.Interaction, message: str) -> None:
 
         await interaction.followup.send(embed=embedVar)
     except e:
+        print(e)
         await interaction.followup.send("Failed to translate!")
 
 def login_hugging_face(token: str) -> None:
