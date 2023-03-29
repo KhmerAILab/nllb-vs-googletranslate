@@ -71,7 +71,9 @@ if ('hugging_face_token' in data and len(data['hugging_face_token']) > 0):
     login_hugging_face(data['hugging_face_token'])
 
 # Load tokenizer and model
+print('Loading tokenizer and model')
 tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-600M", use_auth_token=True, src_lang="eng_Latn")
 model = AutoModelForSeq2SeqLM.from_pretrained("facebook/nllb-200-distilled-600M", use_auth_token=True)
+print('Finished loading!')
 
 client.run(data['discord_bot_token'])
