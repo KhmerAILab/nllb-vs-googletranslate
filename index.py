@@ -44,10 +44,11 @@ async def translate(interaction: discord.Interaction, message: str) -> None:
     res_nllb = tokenizer.batch_decode(translated_tokens, skip_special_tokens=True)[0]
 
     translator = Translator()
-    translation = translator.translate(arg, dest='km')
+    translation = translator.translate(message, dest='km')
     res_gtrans = translation.text
 
     embedVar = discord.Embed(title="Result", color=0x00ff00)
+    embedVar.add_field(name="input", value=message, inline=False)
     embedVar.add_field(name="nllb", value=res_nllb, inline=False)
     embedVar.add_field(name="gtrans", value=res_gtrans, inline=False)
 
