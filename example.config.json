@@ -1,4 +1,5 @@
 {         
     "discord_bot_token": "should be evident",
+    "discord_guild_id": "guild id",
     "hugging_face_token":"to what these mean"
 }
