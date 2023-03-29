@@ -28,7 +28,7 @@ async def translate(ctx, arg):
     res_nllb = tokenizer.batch_decode(translated_tokens, skip_special_tokens=True)[0]
 
     translator = Translator()
-    translation = translator.translate("test", dest='km')
+    translation = translator.translate(arg, dest='km')
     res_gtrans = translation.text
 
     embedVar = discord.Embed(title="Result", color=0x00ff00)
