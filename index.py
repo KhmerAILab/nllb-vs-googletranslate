@@ -37,24 +37,32 @@ async def translate(interaction: discord.Interaction, message: str) -> None:
     await interaction.response.defer()
 
     try:
-        inputs = tokenizer(message, return_tensors="pt", padding = True)
 
-        translated_tokens = model.generate(**inputs, forced_bos_token_id=tokenizer.lang_code_to_id["khm_Khmr"], max_length=100)
-        res_nllb = tokenizer.batch_decode(translated_tokens, skip_special_tokens=True)[0]
-
-        translator = Translator()
-        translation = translator.translate(message, dest='km')
-        res_gtrans = translation.text
-
-        embedVar = discord.Embed(title="Result", color=0x00ff00)
-        embedVar.add_field(name="input", value=message, inline=False)
-        embedVar.add_field(name="nllb", value=res_nllb, inline=False)
-        embedVar.add_field(name="gtrans", value=res_gtrans, inline=False)
-
+        embedVar = translate(message)
         await interaction.followup.send(embed=embedVar)
     except e:
         print(e)
         await interaction.followup.send("Failed to translate!")
+
+def translate(message: str):
+
+    inputs = tokenizer(message, return_tensors="pt", padding = True)
+
+    translated_tokens = model.generate(**inputs, forced_bos_token_id=tokenizer.lang_code_to_id["khm_Khmer"], max_length=100)
+    res_nllb = tokenizer.batch_decode(translated_tokens, skip_special_tokens=True)[0]
+
+    translator = Translator()
+    translation = translator.translate(message, dest='km')
+    res_gtrans = translation.text
+
+    embedVar = discord.Embed(title="Result", color=0x00ff00)
+    embedVar.add_field(name="input", value=message, inline=False)
+    embedVar.add_field(name="nllb", value=res_nllb, inline=False)
+    embedVar.add_field(name="gtrans", value=res_gtrans, inline=False)
+
+    return embedVar
+
+
 
 def login_hugging_face(token: str) -> None:
     """
