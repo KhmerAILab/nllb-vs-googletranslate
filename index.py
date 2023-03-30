@@ -20,7 +20,6 @@ class MyClient(discord.Client):
         self.tree.copy_global_to(guild=MY_GUILD)
         await self.tree.sync(guild=MY_GUILD)
 
-
 intents = discord.Intents.default()
 client = MyClient(intents=intents)
 
@@ -38,14 +37,14 @@ async def translate(interaction: discord.Interaction, message: str) -> None:
 
     try:
         
-        embedVar = translate(message)
+        embedVar = nllb_gtrans_translate(message)
         await interaction.followup.send(embed=embedVar)
 
     except e:
         print(e)
         await interaction.followup.send("Failed to translate!")
 
-def translate(message: str):
+def nllb_gtrans_translate(message: str):
 
     inputs = tokenizer(message, return_tensors="pt", padding = True)
 
@@ -62,8 +61,6 @@ def translate(message: str):
     embedVar.add_field(name="gtrans", value=res_gtrans, inline=False)
 
     return embedVar
-
-
 
 def login_hugging_face(token: str) -> None:
     """
