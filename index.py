@@ -37,9 +37,10 @@ async def translate(interaction: discord.Interaction, message: str) -> None:
     await interaction.response.defer()
 
     try:
-
+        
         embedVar = translate(message)
         await interaction.followup.send(embed=embedVar)
+
     except e:
         print(e)
         await interaction.followup.send("Failed to translate!")
