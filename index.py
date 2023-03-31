@@ -48,7 +48,7 @@ def nllb_gtrans_translate(message: str):
 
     inputs = tokenizer(message, return_tensors="pt", padding = True)
 
-    translated_tokens = model.generate(**inputs, forced_bos_token_id=tokenizer.lang_code_to_id["khm_Khmer"], max_length=100)
+    translated_tokens = model.generate(**inputs, forced_bos_token_id=tokenizer.lang_code_to_id["khm_Khmr"], max_length=100)
     res_nllb = tokenizer.batch_decode(translated_tokens, skip_special_tokens=True)[0]
 
     translator = Translator()
