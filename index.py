@@ -40,7 +40,7 @@ async def translate(interaction: discord.Interaction, message: str) -> None:
         embedVar = nllb_gtrans_translate(message)
         await interaction.followup.send(embed=embedVar)
 
-    except e:
+    except Exception as e:
         print(e)
         await interaction.followup.send("Failed to translate!")
 
